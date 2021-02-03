@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha --timeout 5000 --require @babel/register --recursive --exit --ui tdd tests/"
+    "test": "mocha --timeout 5000 --require @babel/register --require regenerator-runtime/runtime --require core-js/stable --recursive --exit --ui tdd tests/"
   },
   "dependencies": {
     "@babel/core": "^7.11.6",
@@ -14,12 +14,14 @@
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "core-js": "^3.8.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsdom": "^16.4.0",
     "mocha": "^8.1.3",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "regenerator-runtime": "^0.13.7"
   },
   "license": "MIT"
 }

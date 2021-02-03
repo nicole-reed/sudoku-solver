@@ -225,19 +225,24 @@ suite('UnitTests', () => {
 
   suite('SudokuSolver.solve(puzzleString', () => {
 
-    test.only('Valid puzzle strings pass the solver', () => {
-      const input = '5..91372.3...8.5.9.9.25..8.68.47.23...95..46.7.4.....5.2.......4..8916..85.72...3'
-      const output = solver.solve(input)
+    test('Valid puzzle strings pass the solver', () => {
+      const input = '..839.7.575.....964..1.......16.29846.9.312.7..754.....62..5.78.8...3.2...492...1'
 
-      assert.equal(output, '568913724342687519197254386685479231219538467734162895926345178473891652851726943')
+      assert.doesNotThrow(() => solver.solve(input))
     })
 
     test('Invalid puzzle strings do not pass the solver', () => {
+      const input = '9.9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..'
+      const expected = 'Puzzle cannot be solved'
 
+      assert.throws(() => solver.solve(input), expected)
     })
 
     test('Puzzle solver returns expected solution for incomplete puzzle', () => {
+      const input = '.7.89.....5....3.4.2..4..1.5689..472...6.....1.7.5.63873.1.2.8.6..47.1..2.9.387.6'
+      const output = solver.solve(input)
 
+      assert.equal(output, '473891265851726394926345817568913472342687951197254638734162589685479123219538746')
     })
   });
 });

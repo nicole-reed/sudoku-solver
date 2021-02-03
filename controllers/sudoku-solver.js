@@ -19,7 +19,7 @@ class SudokuSolver {
       const validString = /[1-9\.]{81}/g
 
       if (!puzzleString) {
-        throw new Error('Required field missing')
+        throw new Error('Required field(s) missing')
       }
 
       if (puzzleString.length !== 81) {
@@ -93,9 +93,9 @@ class SudokuSolver {
       let region = ''
       if (rowStartValue <= 18) {
         region += 'top'
-      } else if (rowStartValue > 18 && rowStartValue <= 36) {
+      } else if (rowStartValue > 18 && rowStartValue <= 45) {
         region += 'middle'
-      } else if (rowStartValue > 36) {
+      } else {
         region += 'bottom'
       }
 
@@ -117,66 +117,108 @@ class SudokuSolver {
       }
       // console.log('regionVals', regionVals)
       // console.log('value', value)
+
       return !regionVals.includes(value)
     } catch (error) {
-      console.log('error in checkRegionPlacement')
+      console.log('error in checkRegionPlacement', error)
 
       throw error
     }
   }
 
   checkPlacement(puzzleString, row, column, value) {
-    const validRow = this.checkRowPlacement(puzzleString, row, value)
-    const validColumn = this.checkColPlacement(puzzleString, column, value)
-    const validRegion = this.checkRegionPlacement(puzzleString, row, column, value)
+    try {
+      const validRow = this.checkRowPlacement(puzzleString, row, value)
+      const validColumn = this.checkColPlacement(puzzleString, column, value)
+      const validRegion = this.checkRegionPlacement(puzzleString, row, column, value)
 
-    const returnObj = {
-      valid: validRow && validColumn && validRegion
+      const returnObj = {
+        valid: validRow && validColumn && validRegion
+      }
+
+      if (!returnObj.valid) {
+        returnObj.conflicts = []
+      }
+
+      if (!validRow) {
+        returnObj.conflicts.push('row')
+      }
+
+      if (!validColumn) {
+        returnObj.conflicts.push('column')
+      }
+
+      if (!validRegion) {
+        returnObj.conflicts.push('region')
+      }
+
+      return returnObj
+    } catch (error) {
+      console.log('error in checkPlacement')
+      throw error
     }
-
-    if (!returnObj.valid) {
-      returnObj.conflicts = []
-    }
-
-    if (!validRow) {
-      returnObj.conflicts.push('row')
-    }
-
-    if (!validColumn) {
-      returnObj.conflicts.push('column')
-    }
-
-    if (!validRegion) {
-      returnObj.conflicts.push('region')
-    }
-
-    return returnObj
   }
 
 
-  solve(puzzleString) {
-    let puzzleStringCopy = puzzleString.slice().split('')
-    const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+  solve(puzzleString, previousEmptyIndex = 0) {
+    try {
+      this.validate(puzzleString)
 
-    for (let i = 0; i < puzzleStringCopy.length; i++) {
+      if (!puzzleString.includes('.')) {
+        return puzzleString
+      }
 
-      if (puzzleStringCopy[i] === '.') {
-        const rowLetterIndex = Math.floor(i / 9)
-        const rowLetter = rowLetters[rowLetterIndex]
-        const columnNumber = (i % 9) + 1
+      const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+      let retry = false
+      let solutionStartValue = 1
 
-        numberValueLoop:
-        for (let j = 1; j < 10; j++) {
-          if (this.checkPlacement(puzzleStringCopy, rowLetter, columnNumber, j).valid) {
-            puzzleStringCopy[i] = j
-            break numberValueLoop;
+      parentLoop:
+      for (let i = previousEmptyIndex; i < puzzleString.length; i++) {
+
+        if (puzzleString[i] === '.' || (retry && i == previousEmptyIndex)) {
+          const rowLetterIndex = Math.floor(i / 9)
+          const rowLetter = rowLetters[rowLetterIndex]
+          const columnNumber = (i % 9) + 1
+
+          nestedLoop:
+          for (let j = solutionStartValue; j < 10; j++) {
+
+            if (this.checkPlacement(puzzleString, rowLetter, columnNumber, j).valid) {
+
+              let puzzleStringCopy = puzzleString.split('')
+              puzzleStringCopy[i] = j
+              puzzleStringCopy = puzzleStringCopy.join('')
+
+              const solution = this.solve(puzzleStringCopy, i)
+
+              if (solution && !solution.includes('.')) {
+                return solution
+              } else {
+                break nestedLoop
+              }
+            }
+          }
+
+          if (!retry) {
+            retry = true
+            i = previousEmptyIndex - 1
+            solutionStartValue = parseInt(puzzleString[previousEmptyIndex]) + 1
+          } else if (previousEmptyIndex === 0) {
+            throw new Error('Puzzle cannot be solved')
+          } else {
+            break parentLoop
           }
         }
       }
-    }
 
-    return puzzleStringCopy.join('')
+    } catch (error) {
+      console.log('error in solve', error)
+
+      throw error
+    }
   }
 }
 
+
 module.exports = SudokuSolver;
+
