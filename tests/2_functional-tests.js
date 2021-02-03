@@ -1,3 +1,4 @@
+
 const chai = require("chai");
 const chaiHttp = require('chai-http');
 const assert = chai.assert;
@@ -21,7 +22,7 @@ suite('Functional Tests', () => {
 
     test('Solve puzzle with missing puzzle string', async () => {
       const reqBody = {}
-      const expected = 'Required field(s) missing'
+      const expected = 'Required field missing'
       const response = await chai.request(server)
         .post('/api/solve')
         .send(reqBody)
@@ -86,12 +87,12 @@ suite('Functional Tests', () => {
         .send(reqBody)
 
       assert.equal(response.body.valid, false)
-      assert.property(response.body, 'conflicts')
-      assert.isArray(response.body.conflicts, true)
-      assert.include(response.body.conflicts, 'column')
+      assert.property(response.body, 'conflict')
+      assert.isArray(response.body.conflict, true)
+      assert.include(response.body.conflict, 'column')
     })
 
-    test('Check a puzzle placement with multiple placement conflicts', async () => {
+    test('Check a puzzle placement with multiple placement conflict', async () => {
       const reqBody = {
         puzzle: '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..',
         coordinate: 'A9',
@@ -102,13 +103,13 @@ suite('Functional Tests', () => {
         .send(reqBody)
 
       assert.equal(response.body.valid, false)
-      assert.property(response.body, 'conflicts')
-      assert.isArray(response.body.conflicts, true)
-      assert.include(response.body.conflicts, 'column')
-      assert.include(response.body.conflicts, 'region')
+      assert.property(response.body, 'conflict')
+      assert.isArray(response.body.conflict, true)
+      assert.include(response.body.conflict, 'column')
+      assert.include(response.body.conflict, 'region')
     })
 
-    test('Check a puzzle placement with ALL placement conflicts', async () => {
+    test('Check a puzzle placement with ALL placement conflict', async () => {
       const reqBody = {
         puzzle: '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..',
         coordinate: 'A1',
@@ -119,11 +120,11 @@ suite('Functional Tests', () => {
         .send(reqBody)
 
       assert.equal(response.body.valid, false)
-      assert.property(response.body, 'conflicts')
-      assert.isArray(response.body.conflicts, true)
-      assert.include(response.body.conflicts, 'column')
-      assert.include(response.body.conflicts, 'region')
-      assert.include(response.body.conflicts, 'row')
+      assert.property(response.body, 'conflict')
+      assert.isArray(response.body.conflict, true)
+      assert.include(response.body.conflict, 'column')
+      assert.include(response.body.conflict, 'region')
+      assert.include(response.body.conflict, 'row')
     })
 
     test('Check puzzle placement with missing required fields', async () => {
@@ -131,7 +132,7 @@ suite('Functional Tests', () => {
         puzzle: '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..',
         coordinate: 'A1'
       }
-      const expected = 'Required field(s) missing'
+      const expected = 'Required field missing'
       const response = await chai.request(server)
         .post('/api/check')
         .send(reqBody)

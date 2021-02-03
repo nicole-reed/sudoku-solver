@@ -19,7 +19,7 @@ class SudokuSolver {
       const validString = /[1-9\.]{81}/g
 
       if (!puzzleString) {
-        throw new Error('Required field(s) missing')
+        throw new Error('Required field missing')
       }
 
       if (puzzleString.length !== 81) {
@@ -137,19 +137,19 @@ class SudokuSolver {
       }
 
       if (!returnObj.valid) {
-        returnObj.conflicts = []
+        returnObj.conflict = []
       }
 
       if (!validRow) {
-        returnObj.conflicts.push('row')
+        returnObj.conflict.push('row')
       }
 
       if (!validColumn) {
-        returnObj.conflicts.push('column')
+        returnObj.conflict.push('column')
       }
 
       if (!validRegion) {
-        returnObj.conflicts.push('region')
+        returnObj.conflict.push('region')
       }
 
       return returnObj

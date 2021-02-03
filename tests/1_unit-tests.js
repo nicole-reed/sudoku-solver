@@ -19,14 +19,27 @@ suite('UnitTests', () => {
       const input = '1?50.2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'
       const expected = 'Invalid characters in puzzle'
 
-      assert.throws(() => solver.validate(input), expected)
+      assert.throw(() => { solver.validate(input) }, Error, expected)
+      // try {
+      //   solver.validate(input)
+      //   assert.fail('solver.validate() should have thrown')
+      // } catch (error) {
+      //   assert.equal(error.message, expected)
+
+      // }
     })
 
     test('Puzzle string that is not 81 characters in length', () => {
       const input = '.2.3674.3.7.2..9.47...8..1..16....926914.'
       const expected = 'Expected puzzle to be 81 characters long'
 
-      assert.throws(() => solver.validate(input), expected)
+      assert.throw(() => { solver.validate(input) }, Error, expected)
+      // try {
+      //   solver.validate(input)
+      //   assert.fail('solver.validate() should have thrown')
+      // } catch (error) {
+      //   assert.equal(error.message, expected)
+      // }
     })
   });
 
@@ -56,7 +69,13 @@ suite('UnitTests', () => {
       const inputRow = 'P'
       const expected = 'Invalid coordinate'
 
-      assert.throws(() => solver.checkRowPlacement(inputPuz, inputRow, inputVal), expected)
+      assert.throw(() => { solver.checkRowPlacement(inputPuz, inputRow, inputVal) }, Error, expected)
+      // try {
+      //   solver.checkRowPlacement(inputPuz, inputRow, inputVal)
+      //   assert.fail('checkRowPlacement() should have thrown')
+      // } catch (error) {
+      //   assert.equal(error.message, expected)
+      // }
     })
   });
 
@@ -86,7 +105,13 @@ suite('UnitTests', () => {
       const inputCol = 0
       const expected = 'Invalid coordinate'
 
-      assert.throws(() => solver.checkColPlacement(inputPuz, inputCol, inputVal), expected)
+      assert.throw(() => { solver.checkColPlacement(inputPuz, inputCol, inputVal) }, Error, expected)
+      // try {
+      //   solver.checkColPlacement(inputPuz, inputCol, inputVal)
+      //   assert.fail('checkColumnPlacement() should have thrown')
+      // } catch (error) {
+      //   assert.equal(error.message, expected)
+      // }
     })
   });
 
@@ -133,9 +158,9 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'row')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'row')
     })
 
     test('Invalid column placement', () => {
@@ -146,9 +171,9 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'column')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'column')
     })
 
     test('Invalid region placement', () => {
@@ -159,9 +184,9 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'region')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'region')
     })
 
     test('Invalid row and column placement', () => {
@@ -172,10 +197,10 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'row')
-      assert.include(output.conflicts, 'column')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'row')
+      assert.include(output.conflict, 'column')
     })
 
     test('Invalid row and region placement', () => {
@@ -186,10 +211,10 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'row')
-      assert.include(output.conflicts, 'region')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'row')
+      assert.include(output.conflict, 'region')
     })
 
     test('Invalid region and column placement', () => {
@@ -200,10 +225,10 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'column')
-      assert.include(output.conflicts, 'region')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'column')
+      assert.include(output.conflict, 'region')
     })
 
     test('Invalid row, region and column placement', () => {
@@ -214,11 +239,11 @@ suite('UnitTests', () => {
       const output = solver.checkPlacement(inputPuz, inputRow, inputCol, inputVal)
 
       assert.equal(output.valid, false)
-      assert.property(output, 'conflicts')
-      assert.typeOf(output.conflicts, 'array')
-      assert.include(output.conflicts, 'column')
-      assert.include(output.conflicts, 'region')
-      assert.include(output.conflicts, 'row')
+      assert.property(output, 'conflict')
+      assert.typeOf(output.conflict, 'array')
+      assert.include(output.conflict, 'column')
+      assert.include(output.conflict, 'region')
+      assert.include(output.conflict, 'row')
 
     })
   });
@@ -228,14 +253,25 @@ suite('UnitTests', () => {
     test('Valid puzzle strings pass the solver', () => {
       const input = '..839.7.575.....964..1.......16.29846.9.312.7..754.....62..5.78.8...3.2...492...1'
 
-      assert.doesNotThrow(() => solver.solve(input))
+      try {
+        solver.solve(input)
+      } catch {
+        assert.fail('solver.solve() should have thrown')
+      }
+
     })
 
     test('Invalid puzzle strings do not pass the solver', () => {
       const input = '9.9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..'
       const expected = 'Puzzle cannot be solved'
 
-      assert.throws(() => solver.solve(input), expected)
+      assert.throw(() => { solver.solve(input) }, Error, expected)
+      // try {
+      //   solver.solve(input)
+      //   assert.fail('solver.solve() should have thrown')
+      // } catch (error) {
+      //   assert.equal(error.message, expected)
+      // }
     })
 
     test('Puzzle solver returns expected solution for incomplete puzzle', () => {
