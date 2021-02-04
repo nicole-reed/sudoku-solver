@@ -1,5 +1,6 @@
 const chai = require('chai');
 const assert = chai.assert;
+const expect = chai.expect;
 
 const SudokuSolver = require('../controllers/sudoku-solver.js');
 const solver = new SudokuSolver();
@@ -16,30 +17,21 @@ suite('UnitTests', () => {
     })
 
     test('Puzzle string with invalid characters (not 1-9 or .)', () => {
-      const input = '1?50.2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'
-      const expected = 'Invalid characters in puzzle'
+      const input = '1?80.2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'
+      const expected = "Invalid characters in puzzle"
 
-      assert.throw(() => { solver.validate(input) }, Error, expected)
-      // try {
-      //   solver.validate(input)
-      //   assert.fail('solver.validate() should have thrown')
-      // } catch (error) {
-      //   assert.equal(error.message, expected)
 
-      // }
+      expect(() => solver.validate(input)).to.throw(expected)
+
     })
 
     test('Puzzle string that is not 81 characters in length', () => {
       const input = '.2.3674.3.7.2..9.47...8..1..16....926914.'
       const expected = 'Expected puzzle to be 81 characters long'
 
-      assert.throw(() => { solver.validate(input) }, Error, expected)
-      // try {
-      //   solver.validate(input)
-      //   assert.fail('solver.validate() should have thrown')
-      // } catch (error) {
-      //   assert.equal(error.message, expected)
-      // }
+
+      expect(() => solver.validate(input)).to.throw(expected)
+
     })
   });
 
@@ -69,13 +61,8 @@ suite('UnitTests', () => {
       const inputRow = 'P'
       const expected = 'Invalid coordinate'
 
-      assert.throw(() => { solver.checkRowPlacement(inputPuz, inputRow, inputVal) }, Error, expected)
-      // try {
-      //   solver.checkRowPlacement(inputPuz, inputRow, inputVal)
-      //   assert.fail('checkRowPlacement() should have thrown')
-      // } catch (error) {
-      //   assert.equal(error.message, expected)
-      // }
+      expect(() => solver.checkRowPlacement(inputPuz, inputRow, inputVal)).to.throw(expected)
+
     })
   });
 
@@ -105,13 +92,9 @@ suite('UnitTests', () => {
       const inputCol = 0
       const expected = 'Invalid coordinate'
 
-      assert.throw(() => { solver.checkColPlacement(inputPuz, inputCol, inputVal) }, Error, expected)
-      // try {
-      //   solver.checkColPlacement(inputPuz, inputCol, inputVal)
-      //   assert.fail('checkColumnPlacement() should have thrown')
-      // } catch (error) {
-      //   assert.equal(error.message, expected)
-      // }
+
+      expect(() => solver.checkColPlacement(inputPuz, inputCol, inputVal)).to.throw(expected)
+
     })
   });
 
@@ -265,13 +248,9 @@ suite('UnitTests', () => {
       const input = '9.9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..'
       const expected = 'Puzzle cannot be solved'
 
-      assert.throw(() => { solver.solve(input) }, Error, expected)
-      // try {
-      //   solver.solve(input)
-      //   assert.fail('solver.solve() should have thrown')
-      // } catch (error) {
-      //   assert.equal(error.message, expected)
-      // }
+
+      expect(() => solver.solve(input)).to.throw(expected)
+
     })
 
     test('Puzzle solver returns expected solution for incomplete puzzle', () => {

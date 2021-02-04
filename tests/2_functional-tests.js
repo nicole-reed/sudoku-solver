@@ -63,7 +63,7 @@ suite('Functional Tests', () => {
 
   suite('POST /api/check', () => {
 
-    test('Check a puzzle placement with all fields', async () => {
+    test.only('Check a puzzle placement with all fields', () => {
       const reqBody = {
         puzzle: '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..',
         coordinate: 'A1',
@@ -132,7 +132,7 @@ suite('Functional Tests', () => {
         puzzle: '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..',
         coordinate: 'A1'
       }
-      const expected = 'Required field missing'
+      const expected = 'Required field(s) missing'
       const response = await chai.request(server)
         .post('/api/check')
         .send(reqBody)
@@ -192,7 +192,6 @@ suite('Functional Tests', () => {
       const response = await chai.request(server)
         .post('/api/check')
         .send(reqBody)
-      console.log('response.body', response.body)
 
       assert.equal(response.body.error, expected)
     })
